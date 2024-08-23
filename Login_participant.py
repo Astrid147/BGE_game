@@ -12,7 +12,7 @@ app = dash.Dash(__name__)
 def render_right_panel():
     return html.Div(
         # Color and settings background
-        style={**style.right_style, 'right': '0', 'backgroundColor': style.COLOR_DARKGREEN},
+        style={**style.right_style, 'backgroundColor': style.COLOR_BLACK},
         # Set location of input fields and login button
         children=html.Div(
             style={
@@ -22,12 +22,13 @@ def render_right_panel():
                 'flexDirection': 'column',
             },
             children=[
-                # Define username text and input field
+                # Define admin name text and input field
                 html.Div(
                     style={'display': 'flex', 'alignItems': 'center', 'marginBottom': '20px'},
                     children=[
-                        html.Div("Username", style= style.login_text_style),
-                        dbc.Input(id='input-username', style={"width": style.INPUT_WIDTH_LOGIN, "height": style.INPUT_HEIGHT_LOGIN})
+                        html.Div("Admin name", style=style.login_text_style),
+                        dbc.Input(id='input-adminname-admin', style={"width": style.INPUT_WIDTH_LOGIN,
+                                                                     "height": style.INPUT_HEIGHT_LOGIN})
                     ]
                 ),
                 # Define password text and input field
@@ -35,17 +36,9 @@ def render_right_panel():
                     style={'display': 'flex', 'alignItems': 'center'},
                     children=[
                         html.Div("Password", style=style.login_text_style),
-                        dbc.Input(id='input-password', type='password', style={"width": style.INPUT_WIDTH_LOGIN, "height": style.INPUT_HEIGHT_LOGIN})
-                    ]
-                ),
-                html.Br(),
-                # Define Experiment ID text and input field
-                html.Div(
-                    style={'display': 'flex', 'alignItems': 'center'},
-                    children=[
-                        html.Div("Experiment ID", style=style.login_text_style),
-                        dbc.Input(id='input-experimentID', type='text',
-                                  style={"width": style.INPUT_WIDTH_LOGIN, "height": style.INPUT_HEIGHT_LOGIN})
+                        dbc.Input(id='input-password-admin', type='password',
+                                  style={"width": style.INPUT_WIDTH_LOGIN,
+                                         "height": style.INPUT_HEIGHT_LOGIN})
                     ]
                 ),
                 html.Br(),
@@ -53,7 +46,8 @@ def render_right_panel():
                 html.Div(
                     style={'display': 'flex', 'alignItems': 'center'},
                     children=[
-                        dbc.Button("Log in", color=style.COLOR_DARKGREEN, id="button-login", n_clicks=0, style={**style.login_button_style, "backgroundColor": style.COLOR_EXPRES}),
+                        dbc.Button("Log in", color=style.COLOR_BLACK, id="button-login-admin", n_clicks=0,
+                                   style={**style.login_button_style, 'backgroundColor': style.COLOR_LIGHTBLUE}),
                     ]
                 ),
                 html.Br(),
@@ -61,7 +55,9 @@ def render_right_panel():
                 html.Div(
                     style={'display': 'flex', 'alignItems': 'center'},
                     children=[
-                        dbc.Button("Switch to user module", color=style.COLOR_DARKGREEN, id="button-switch", n_clicks=0, style={**style.switch_button_style, "backgroundColor": style.COLOR_EXPRES}),
+                        dbc.Button("Switch to user module", color=style.COLOR_BLACK, id="button-switch-admin",
+                                   n_clicks=0,
+                                   style= {**style.switch_button_style, 'backgroundColor': style.COLOR_LIGHTBLUE}),
                     ]
                 )
             ]
@@ -75,22 +71,26 @@ def render_left_panel():
         children=[
             # Create top left part of page
             html.Div(
-                style={'position': 'absolute', 'top': '0', 'left': '0', 'width': '50%', 'height': '50%', 'backgroundColor': style.COLOR_DARKGRAY},
-                children=html.Div("Classroom log in", style= {**style.title_style,     'color': style.COLOR_WHITE})
+                style={**style.left_style,
+                       'top': '0',
+                       'width': '50%',
+                       'backgroundColor': style.COLOR_LIGHTBLUE},
+                children=html.Div("Admin Module", style= style.title_style)
             ),
             # Create bottom left part of page
-            html.Div(style={'position': 'absolute', 'bottom': '0', 'left': '0', 'width': '25%', 'height': '50%', 'backgroundColor': style.COLOR_DARKGRAY}),
+            html.Div(style={**style.left_style,
+                            'bottom': '0',
+                            'backgroundColor': style.COLOR_LIGHTBLUE}),
             # Create bottom middle diagonal line
             html.Div(
-                style={
-                    'position': 'absolute',
-                    'bottom': '0',
-                    'left': '25%',
-                    'width': '25%',
-                    'height': '50%',
-                    'background': f'linear-gradient(to bottom right, {style.COLOR_DARKGRAY} 50%, {style.COLOR_DARKGREEN} 50%)',
+                style={**style.left_style,
+                       'left': '25%',
+                       'bottom': '0',
+                       'background': f'linear-gradient(to bottom right, {style.COLOR_LIGHTBLUE} 50%, '
+                                     f'{style.COLOR_BLACK} 50%)',
                 }
             ),
+
         ]
     )
 
@@ -105,7 +105,7 @@ app.layout = html.Div(
         render_left_panel(),
         # Image
         html.Div(
-            style=style.grc_bottom_img,
+            style= style.grc_bottom_img,
             children=[
                 html.Img(src="/assets/GRC.png", style={'width': '100%', 'height': 'auto', 'borderRadius': '15px'})
             ]
