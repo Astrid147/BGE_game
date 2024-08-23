@@ -52,7 +52,8 @@ app.layout = html.Div(
             src="/assets/GRC.png",
             style=style.grc_bottom_img
         )
-    ]
+    ],
+
 )
 
 # Callback of the tabs. The makes sure that clicking on a tab shows the content of only that tab
@@ -79,6 +80,6 @@ def display_content(n_clicks_about, n_clicks_data, n_clicks_newgame):
     else:
         return tab_about_content
 
-
+# Run app.
 if __name__ == "__main__":
     app.run_server(debug=True)
