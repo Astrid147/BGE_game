@@ -77,7 +77,7 @@ q5 = html.Div([
     html.Hr(style=style.question_line_style),
     html.Div(
         [html.Span("0 - Completely unwilling to take risks", style = {'float': 'left', 'position': 'relative', 'top': '-10px'}),
-         html.Span("10 = Very willing to take risks", style = {'float': 'right', 'position': 'relative', 'top': '-10px'}),
+         html.Span("10 - Very willing to take risks", style = {'float': 'right', 'position': 'relative', 'top': '-10px'}),
          ],
         style={**style.text_question_style, "backgroundColor": "white", 'marginBottom': '30px', 'line-height': '1.5'}
 
@@ -102,8 +102,10 @@ def inner_panel():
                 },
         children= [        html.Div(id="start_id", children=start),  # Start block
         html.Div(id="question_container", children=[q1, q2, q3, q4, q5]),  # Container for all questions
-
-        dbc.Button("Next", color="primary", id="button_next", n_clicks=0, style = {**style.question_next_button_style, }),
+        dbc.Button("Previous", id = "button_previous", n_clicks=0,
+                   style = {**style.question_next_button_style, 'right': '50%',  'backgroundColor': style.COLOR_WHITE}),
+        dbc.Button("Next", id="button_next", n_clicks=0,
+                   style = {**style.question_next_button_style, }),
         # Hidden div to store the current question index
         html.Div(id='current_step', children=0, style={'display': 'none'}),]
     )
@@ -121,7 +123,6 @@ app.layout = html.Div(
 
     ]
 )
-
 # Callback to update questions based on button clicks
 @app.callback(
     [Output("div_q1", "style"),
@@ -131,44 +132,65 @@ app.layout = html.Div(
      Output("div_q5", "style"),
      Output("start_id", "children"),
      Output('current_step', 'children')],
-    Input("button_next", "n_clicks"),
-    State("input_q1", "value"),
-    State("input_q2", "value"),
-    State("input_q3", "value"),
-    State("input_q4", "value"),
-    State("input_q5", "value"),
-    State('current_step', 'children')
+    [Input("button_next", "n_clicks"),
+     Input("button_previous", "n_clicks")],
+    [State("input_q1", "value"),
+     State("input_q2", "value"),
+     State("input_q3", "value"),
+     State("input_q4", "value"),
+     State("input_q5", "value"),
+     State('current_step', 'children')]
 )
-def update_question(n_clicks, q1_value, q2_value, q3_value, q4_value, q5_value, current_step):
-    if current_step == 0:
-        return {"display": "none"}, {"display": "none"}, {"display": "none"}, {"display": "none"}, {"display": "none"}, start, 1
-    elif current_step == 1:
-        if q1_value:
-            return {"display": "none"}, {"display": "block"}, {"display": "none"}, {"display": "none"}, {"display": "none"}, None, 2
-        else:
-            return {"display": "block"}, {"display": "none"}, {"display": "none"}, {"display": "none"}, {"display": "none"}, None, 1
-    elif current_step == 2:
-        if q2_value:
-            return {"display": "none"}, {"display": "none"}, {"display": "block"}, {"display": "none"}, {"display": "none"}, None, 3
-        else:
-            return {"display": "none"}, {"display": "block"}, {"display": "none"}, {"display": "none"}, {"display": "none"}, None, 2
-    elif current_step == 3:
-        if q3_value:
-            return {"display": "none"}, {"display": "none"}, {"display": "none"}, {"display": "block"}, {"display": "none"}, None, 4
-        else:
-            return {"display": "none"}, {"display": "none"}, {"display": "block"}, {"display": "none"}, {"display": "none"}, None, 3
-    elif current_step == 4:
-        if q4_value:
-            return {"display": "none"}, {"display": "none"}, {"display": "none"}, {"display": "none"}, {"display": "block"}, None, 5
-        else:
-            return {"display": "none"}, {"display": "none"}, {"display": "none"}, {"display": "block"}, {"display": "none"}, None, 4
-    else:
-        if q5_value:
-            return {"display": "none"}, {"display": "none"}, {"display": "none"}, {"display": "none"}, {"display": "none"}, html.H6(
-                    "Survey Completed. Thank you!", style = {**style.text_style,  'fontSize': '20px', 'font-weight': 'bold'}), 6
-        else:
-             return {"display": "none"}, {"display": "none"}, {"display": "block"}, {"display": "none"}, {"display": "none"}, None, 5
+def update_question(next_clicks, prev_clicks, q1_value, q2_value, q3_value, q4_value, q5_value, current_step):
+    # Initialize next_clicks and prev_clicks to 0 if None (initial state)
+    if next_clicks is None:
+        next_clicks = 0
+    if prev_clicks is None:
+        prev_clicks = 0
 
+    # Determine the action based on the latest button click
+    ctx = dash.callback_context
+    if not ctx.triggered:
+        button_id = 'No clicks yet'
+    else:
+        button_id = ctx.triggered[0]['prop_id'].split('.')[0]
+
+    # Update current_step based on which button was clicked
+    if button_id == "button_next":
+        if current_step == 0:
+            current_step += 1
+        elif current_step == 1 and q1_value is not None:
+            current_step += 1
+        elif current_step == 2 and q2_value is not None:
+            current_step += 1
+        elif current_step == 3 and q3_value is not None:
+            current_step += 1
+        elif current_step == 4 and q4_value is not None:
+            current_step += 1
+        elif current_step == 5 and q5_value is not None:
+            current_step += 1
+    elif button_id == "button_previous" and current_step > 0:
+        current_step -= 1
+
+    # Ensure current_step is within the valid range
+    current_step = max(0, min(current_step, 6))  # Assuming 5 questions + 1 completion screen
+
+    # Return the styles based on the updated current_step
+    if current_step == 0:
+        return {"display": "none"}, {"display": "none"}, {"display": "none"}, {"display": "none"}, {"display": "none"}, start, current_step
+    elif current_step == 1:
+        return {"display": "block"}, {"display": "none"}, {"display": "none"}, {"display": "none"}, {"display": "none"}, None, current_step
+    elif current_step == 2:
+        return {"display": "none"}, {"display": "block"}, {"display": "none"}, {"display": "none"}, {"display": "none"}, None, current_step
+    elif current_step == 3:
+        return {"display": "none"}, {"display": "none"}, {"display": "block"}, {"display": "none"}, {"display": "none"}, None, current_step
+    elif current_step == 4:
+        return {"display": "none"}, {"display": "none"}, {"display": "none"}, {"display": "block"}, {"display": "none"}, None, current_step
+    elif current_step == 5:
+        return {"display": "none"}, {"display": "none"}, {"display": "none"}, {"display": "none"}, {"display": "block"}, None, current_step
+    else:
+        return {"display": "none"}, {"display": "none"}, {"display": "none"}, {"display": "none"}, {"display": "none"}, html.H6(
+                "Survey Completed. Thank you!", style={**style.text_style, 'fontSize': '20px', 'font-weight': 'bold'}), current_step
 
 # Run the app
 if __name__ == "__main__":
