@@ -172,10 +172,10 @@ def update_question(next_clicks, prev_clicks, q1_value, q2_value, q3_value, q4_v
     elif button_id == "button_previous" and current_step > 0:
         current_step -= 1
 
-    # Ensure current_step is within the valid range
-    current_step = max(0, min(current_step, 6))  # Assuming 5 questions + 1 completion screen
+    # Ensure current_step is within the nummer of pages
+    current_step = max(0, min(current_step, 6))  # 5 questions + 1 completion screen
 
-    # Return the styles based on the updated current_step
+    # Show question based on current_step
     if current_step == 0:
         return {"display": "none"}, {"display": "none"}, {"display": "none"}, {"display": "none"}, {"display": "none"}, start, current_step
     elif current_step == 1:
@@ -190,7 +190,7 @@ def update_question(next_clicks, prev_clicks, q1_value, q2_value, q3_value, q4_v
         return {"display": "none"}, {"display": "none"}, {"display": "none"}, {"display": "none"}, {"display": "block"}, None, current_step
     else:
         return {"display": "none"}, {"display": "none"}, {"display": "none"}, {"display": "none"}, {"display": "none"}, html.H6(
-                "Survey Completed. Thank you!", style={**style.text_style, 'fontSize': '20px', 'font-weight': 'bold'}), current_step
+                "End. Thank you!", style={**style.text_style, 'fontSize': '20px', 'font-weight': 'bold'}), current_step
 
 # Run the app
 if __name__ == "__main__":
