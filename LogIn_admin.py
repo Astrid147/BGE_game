@@ -27,7 +27,8 @@ def render_right_panel():
                     style={'display': 'flex', 'alignItems': 'center', 'marginBottom': '20px'},
                     children=[
                         html.Div("Admin name", style=style.login_text_style),
-                        dbc.Input(id='input-adminname-admin', style={"width": style.INPUT_WIDTH_LOGIN, "height": style.INPUT_HEIGHT_LOGIN})
+                        dbc.Input(id='input-adminname-admin', style={"width": style.INPUT_WIDTH_LOGIN,
+                                                                     "height": style.INPUT_HEIGHT_LOGIN})
                     ]
                 ),
                 # Define password text and input field
@@ -35,7 +36,9 @@ def render_right_panel():
                     style={'display': 'flex', 'alignItems': 'center'},
                     children=[
                         html.Div("Password", style=style.login_text_style),
-                        dbc.Input(id='input-password-admin', type='password', style={"width": style.INPUT_WIDTH_LOGIN, "height": style.INPUT_HEIGHT_LOGIN})
+                        dbc.Input(id='input-password-admin', type='password',
+                                  style={"width": style.INPUT_WIDTH_LOGIN,
+                                         "height": style.INPUT_HEIGHT_LOGIN})
                     ]
                 ),
                 html.Br(),
@@ -43,8 +46,8 @@ def render_right_panel():
                 html.Div(
                     style={'display': 'flex', 'alignItems': 'center'},
                     children=[
-                        dbc.Button("Log in", color=style.COLOR_BLACK, id="button-login-admin", n_clicks=0, style={**style.login_button_style,
-                                                                                                            'backgroundColor': style.COLOR_LIGHTBLUE}),
+                        dbc.Button("Log in", color=style.COLOR_BLACK, id="button-login-admin", n_clicks=0,
+                                   style={**style.login_button_style, 'backgroundColor': style.COLOR_LIGHTBLUE}),
                     ]
                 ),
                 html.Br(),
@@ -52,8 +55,9 @@ def render_right_panel():
                 html.Div(
                     style={'display': 'flex', 'alignItems': 'center'},
                     children=[
-                        dbc.Button("Switch to user module", color=style.COLOR_BLACK, id="button-switch-admin", n_clicks=0, style= {**style.switch_button_style,
-                                                                                                                             'backgroundColor': style.COLOR_LIGHTBLUE}),
+                        dbc.Button("Switch to user module", color=style.COLOR_BLACK, id="button-switch-admin",
+                                   n_clicks=0,
+                                   style= {**style.switch_button_style, 'backgroundColor': style.COLOR_LIGHTBLUE}),
                     ]
                 )
             ]
@@ -82,7 +86,8 @@ def render_left_panel():
                 style={**style.left_style,
                        'left': '25%',
                        'bottom': '0',
-                       'background': f'linear-gradient(to bottom right, {style.COLOR_LIGHTBLUE} 50%, {style.COLOR_BLACK} 50%)',
+                       'background': f'linear-gradient(to bottom right, {style.COLOR_LIGHTBLUE} 50%, '
+                                     f'{style.COLOR_BLACK} 50%)',
                 }
             ),
 
@@ -108,6 +113,6 @@ app.layout = html.Div(
     ]
 )
 
-# Run app. 
+# Run app.
 if __name__ == "__main__":
     app.run_server(debug=True)
